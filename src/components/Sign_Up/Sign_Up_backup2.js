@@ -23,9 +23,6 @@ const SignUpPage = () => {
     });
 
     const json = await response.json();
-    //Debug Log
-    console.log("Status:", response.status);
-    console.log("Response JSON:", json); //for log tracing
 
     if (json.authtoken) {
       sessionStorage.setItem("auth-token", json.authtoken);
@@ -35,15 +32,7 @@ const SignUpPage = () => {
       navigate("/");
       window.location.reload();
     } else {
-      //setShowerr(json.error || (json.errors && json.errors[0].msg));
-      // Jika error dalam bentuk array
-      if (Array.isArray(json.errors)) {
-        setShowerr(json.errors.map((err) => err.msg).join(", "));
-      } else if (typeof json.error === "string") {
-        setShowerr(json.error);
-      } else {
-        setShowerr("An unknown error occurred.");
-      }
+      setShowerr(json.error || (json.errors && json.errors[0].msg));
     }
   };
 

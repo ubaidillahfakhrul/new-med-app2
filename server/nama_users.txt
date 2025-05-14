@@ -1,0 +1,4 @@
+MongoDB shell version v3.6.8
+connecting to: mongodb://127.0.0.1:27017/stayhealthybeta1
+Implicit session: session { "id" : UUID("331a8429-1cb9-4c6e-b0f3-74a0d0700176") }
+MongoDB server version: 3.6.8
