@@ -54,7 +54,10 @@ function Navbar() {
           <Link to="/">Home</Link>
         </li>
         <li className="link">
-          <a href="#">Appointments</a>
+          {/* <a href="#">Appointments</a> */}
+          <Link to={email ? "/instant-consultation" : "/login"}>
+            Appointments
+          </Link>
         </li>
 
         {/* Jika belum login/signup */}

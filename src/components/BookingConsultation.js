@@ -25,7 +25,7 @@ const InstantConsultation = () => {
           setFilteredDoctors(filtered);
 
           setIsSearched(true);
-          window.reload();
+          //window.location.reload();  //baru saja dirubah asalnya window.reload();
         } else {
           setFilteredDoctors([]);
           setIsSearched(false);

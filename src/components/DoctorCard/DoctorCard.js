@@ -9,6 +9,14 @@ const DoctorCard = ({ name, speciality, experience, ratings, profilePic }) => {
   const [showModal, setShowModal] = useState(false);
   const [appointments, setAppointments] = useState([]);
 
+  // ⬇️ Ambil data appointment dari localStorage saat komponen dimount
+  useEffect(() => {
+    const storedAppointments = localStorage.getItem(`appointments-${name}`);
+    if (storedAppointments) {
+      setAppointments(JSON.parse(storedAppointments));
+    }
+  }, []);
+
   const handleBooking = () => {
     setShowModal(true);
   };
@@ -18,6 +26,8 @@ const DoctorCard = ({ name, speciality, experience, ratings, profilePic }) => {
       (appointment) => appointment.id !== appointmentId
     );
     setAppointments(updatedAppointments);
+    //tambahan
+    localStorage.setItem(`appointments-${name}`, JSON.stringify(updatedAppointments));
   };
 
   const handleFormSubmit = (appointmentData) => {
@@ -28,6 +38,8 @@ const DoctorCard = ({ name, speciality, experience, ratings, profilePic }) => {
     const updatedAppointments = [...appointments, newAppointment];
     setAppointments(updatedAppointments);
     setShowModal(false);
+    // Simpan ke localStorage (gunakan nama dokter sebagai key unik)
+    localStorage.setItem(`appointments-${name}`, JSON.stringify(updatedAppointments));
   };
 
   return (
