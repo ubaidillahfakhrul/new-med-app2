@@ -23,7 +23,8 @@ const LoginPage = () => {
   // Function to handle login form submission
   const login = async (e) => {
     e.preventDefault();
-    // Send a POST request to the login API endpoint
+    try {
+          // Send a POST request to the login API endpoint
     const res = await fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
       headers: {
@@ -47,13 +48,20 @@ const LoginPage = () => {
       window.location.reload();
     } else {
       // Handle errors if authentication fails
-      if (json.errors) {
-        for (const error of json.errors) {
-          alert(error.msg);
-        }
-      } else {
-        alert(json.error);
-      }
+      // if (json.errors) {
+      //   for (const error of json.errors) {
+      //     alert(error.msg);
+      //   }
+      // } else {
+      //   alert(json.error);
+      // }
+      alert("Login gagal. Token tidak diterima.");
+    }
+    }
+    catch (error) {
+      // Tangkap error jaringan (misal backend belum jalan)
+      console.error("Login error:", error);
+      alert("Gagal login: Tidak bisa terhubung ke server. Pastikan backend sedang aktif.");
     }
   };
 

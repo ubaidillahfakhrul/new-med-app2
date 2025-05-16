@@ -1,0 +1,8 @@
+.warning {
+  color: red;
+  font-weight: bold;
+}
+
+.rating span:hover {
+  color: #ffa500;
+}

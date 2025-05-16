@@ -6,6 +6,8 @@ import Landing_Page from "./components/Landing_Page/LandingPage";
 import SignUpPage from "./components/Sign_Up/Sign_Up";
 import LoginPage from "./components/Login/Login";
 import Notification from "./components/Notification/Notification";
+import GiveReviews from "./components/ReviewForm/ReviewForm";
+import PageReview from "./components/ReviewForm/GiveReviews";
 
 function App() {
   const [userName, setUserName] = useState("");
@@ -21,8 +23,14 @@ function App() {
       <Notification>
         <Routes>
           <Route path="/" element={<Landing_Page />} />
-          <Route path="/sign_up" element={<SignUpPage setUserName={setUserName} />} />
-          <Route path="/login" element={<LoginPage setUserName={setUserName} />} />
+          <Route
+            path="/sign_up"
+            element={<SignUpPage setUserName={setUserName} />}
+          />
+          <Route
+            path="/login"
+            element={<LoginPage setUserName={setUserName} />}
+          />
           <Route
             path="/instant-consultation"
             element={
@@ -33,6 +41,7 @@ function App() {
               )
             }
           />
+          <Route path="/reviews" element={<PageReview />} />
         </Routes>
       </Notification>
     </div>

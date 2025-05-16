@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
-const AppointmentForm = ({ doctorName = "Dr. Denis Raj", doctorSpeciality = "Dentist", onSubmit }) => {
+const AppointmentForm = ({
+  doctorName = "Dr. Denis Raj",
+  doctorSpeciality = "Dentist",
+  onSubmit,
+}) => {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [appointmentDate, setAppointmentDate] = useState("");
@@ -8,7 +12,26 @@ const AppointmentForm = ({ doctorName = "Dr. Denis Raj", doctorSpeciality = "Den
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ name, phoneNumber, appointmentDate, timeSlot });
+    const appointment = {
+      name,
+      phoneNumber,
+      appointmentDate,
+      timeSlot,
+      doctorName,
+      doctorSpeciality,
+      status: "confirmed",
+    };
+
+    // Simpan ke localStorage
+    const existingAppointments = JSON.parse(
+      localStorage.getItem("appointments") || "[]"
+    );
+    localStorage.setItem(
+      "appointments",
+      JSON.stringify([...existingAppointments, appointment])
+    );
+
+    onSubmit(appointment); // optional callback
     setName("");
     setPhoneNumber("");
     setAppointmentDate("");
@@ -74,7 +97,9 @@ const AppointmentForm = ({ doctorName = "Dr. Denis Raj", doctorSpeciality = "Den
           </select>
         </div>
 
-        <button type="submit" style={styles.button}>Book Now</button>
+        <button type="submit" style={styles.button}>
+          Book Now
+        </button>
       </form>
     </div>
   );
@@ -89,36 +114,36 @@ const styles = {
     backgroundColor: "#f8f8f8",
     textAlign: "center",
     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-    fontFamily: "Arial, sans-serif"
+    fontFamily: "Arial, sans-serif",
   },
   heading: {
-    margin: "10px 0 0 0"
+    margin: "10px 0 0 0",
   },
   subText: {
     margin: "5px 0",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   experience: {
     margin: "5px 0",
-    color: "#555"
+    color: "#555",
   },
   rating: {
     margin: "10px 0",
-    color: "#333"
+    color: "#333",
   },
   form: {
-    marginTop: "15px"
+    marginTop: "15px",
   },
   formGroup: {
     marginBottom: "15px",
-    textAlign: "left"
+    textAlign: "left",
   },
   input: {
     width: "100%",
     padding: "8px",
     marginTop: "5px",
     borderRadius: "4px",
-    border: "1px solid #ccc"
+    border: "1px solid #ccc",
   },
   button: {
     width: "100%",
@@ -127,8 +152,8 @@ const styles = {
     color: "#fff",
     border: "none",
     borderRadius: "5px",
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  },
 };
 
 export default AppointmentForm;

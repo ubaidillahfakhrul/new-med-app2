@@ -59,6 +59,9 @@ function Navbar() {
             Appointments
           </Link>
         </li>
+        <li className="link">
+          <Link to={email ? "/reviews" : "/login"}>Review</Link>
+        </li>
 
         {/* Jika belum login/signup */}
         {!email ? (
