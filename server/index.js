@@ -20,7 +20,7 @@ mongoose.connection.once("open", () => {
 // SESSION Middleware (letakkan di sini)
 app.use(
   session({
-    secret: "your-secret", // ganti dengan environment variable untuk security
+    secret: process.env.SESSION_SECRET || 'secretdefault', // ganti dengan environment variable untuk security
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
@@ -32,6 +32,8 @@ app.use(
     },
   })
 );
+
+console.log('MongoDB URI:', process.env.MONGODB_URI); // sementara untuk debug
 
 // Routes
 app.use("/api", require("./routes/api")); // contoh penggunaan route
