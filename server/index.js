@@ -1,39 +1,25 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const http = require("http");
-const connectToMongo = require("./db");
+
 const app = express();
-const path = require("path");
-
-app.set("view engine", "ejs");
-app.use(express.static("public"));
-
 const PORT = process.env.PORT || 8181;
 
-// Middleware
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// Routes
-app.use("/api/auth", require("./routes/auth"));
-// app.get("/", (req, res) => {
-//   res.send("Hello World!");
-// });
-
-// Serve static React files
-app.use(express.static(path.join(__dirname, "build")));
-// Catch-all route (for React Router)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
-
-// Connect to MongoDB first, then start server
-connectToMongo()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`✅ Server is running on port http://localhost:${PORT}`);
-    });
+// connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch((err) => {
-    console.error("❌ Failed to connect to MongoDB:", err);
-  });
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
+
+// contoh route
+app.use("/api", require("./routes"));
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
