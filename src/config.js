@@ -9,4 +9,4 @@ const isLocal =
 
 export const API_URL = isLocal
   ? "http://localhost:8181"
-  : "https://your-production-url.com";
+  : "https://new-med-app2.onrender.com";  //url back end for live

@@ -34,6 +34,7 @@ app.use(
 );
 
 console.log('MongoDB URI:', process.env.MONGODB_URI); // sementara untuk debug
+mongoose.set('strictQuery', true); // atau false sesuai kebutuhan
 
 // Routes
 app.use("/api", require("./routes/api")); // contoh penggunaan route
