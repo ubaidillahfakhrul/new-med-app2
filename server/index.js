@@ -5,9 +5,24 @@ const MongoStore = require("connect-mongo");
 const app = express();
 const cors = require('cors');
 
+app.use(cors({
+  origin: 'https://new-med-app.onrender.com',  // alamat frontend kamu
+  credentials: true, // kalau perlu kirim cookie/session
+}));
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// route register
+app.post('/api/auth/register', (req, res) => {
+  // proses registrasi user dan simpan ke MongoDB
+  res.json({ message: 'Register success' });
+});
+
+app.listen(process.env.PORT || 10000, () => {
+  console.log('Server running...');
+});
 
 // Koneksi MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
@@ -46,7 +61,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-app.use(cors({
-  origin: 'https://new-med-app.onrender.com',  // alamat frontend kamu
-  credentials: true, // kalau perlu kirim cookie/session
-}));
+
