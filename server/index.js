@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const app = express();
+const cors = require('cors');
 
 // Middleware
 app.use(express.json());
@@ -44,3 +45,8 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+app.use(cors({
+  origin: 'https://new-med-app.onrender.com',  // alamat frontend kamu
+  credentials: true, // kalau perlu kirim cookie/session
+}));
