@@ -2,27 +2,35 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const cors = require("cors");
+
 const app = express();
-const cors = require('cors');
+const routes = require("./routes");  // Pastikan path-nya benar
 
 app.use(cors({
-  origin: 'https://new-med-app.onrender.com',  // alamat frontend kamu
-  credentials: true, // kalau perlu kirim cookie/session
+  origin: 'https://new-med-app.onrender.com',
+  credentials: true,
 }));
 
-// Middleware
 app.use(express.json());
+app.use("/api", routes);  // Ini otomatis meng-handle semua /api/auth/*
 app.use(express.urlencoded({ extended: true }));
 
-// route register
-app.post('/api/auth/register', (req, res) => {
-  // proses registrasi user dan simpan ke MongoDB
-  res.json({ message: 'Register success' });
-});
-
-app.listen(process.env.PORT || 10000, () => {
-  console.log('Server running...');
-});
+// Session middleware (letakkan sebelum routes)
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'secretdefault',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      collectionName: "sessions",
+    }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
 
 // Koneksi MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
@@ -33,32 +41,9 @@ mongoose.connection.once("open", () => {
   console.log("MongoDB connected");
 });
 
-// SESSION Middleware (letakkan di sini)
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'secretdefault', // ganti dengan environment variable untuk security
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
-      collectionName: "sessions",
-    }),
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24, // 1 hari
-    },
-  })
-);
+mongoose.set('strictQuery', true);
 
-console.log('MongoDB URI:', process.env.MONGODB_URI); // sementara untuk debug
-mongoose.set('strictQuery', true); // atau false sesuai kebutuhan
-
-// Routes
-app.use("/api", require("./routes/api")); // contoh penggunaan route
-
-// Jalankan server
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-
