@@ -14,6 +14,18 @@ const SignUpPage = () => {
   const register = async (e) => {
     e.preventDefault();
 
+    // Validasi nomor telepon: hanya 10 digit angka
+    if (!/^\d{10}$/.test(phone)) {
+      setShowerr("Phone number must be exactly 10 digits.");
+      return;
+    }
+
+    // Validasi password minimal 6 karakter (opsional)
+    if (password.length < 8) {
+      setShowerr("Password must be at least 8 characters.");
+      return;
+    }
+
     const response = await fetch(`${API_URL}/api/auth/register`, {
       method: "POST",
       headers: {
@@ -22,10 +34,22 @@ const SignUpPage = () => {
       body: JSON.stringify({ name, email, password, phone }),
     });
 
-    const json = await response.json();
+    //const json = await response.json();
     //Debug Log
     console.log("Status:", response.status);
-    console.log("Response JSON:", json); //for log tracing
+
+    const text = await response.text();
+    console.log("Raw response text:", text);
+
+    let json = {};
+    try {
+      json = JSON.parse(text);
+      console.log("Response JSON:", json); //for log tracing
+    } catch (err) {
+      console.error("JSON parse error:", err);
+      setShowerr("Failed get response from server. Please try again.");
+      return;
+    }
 
     if (json.authtoken) {
       sessionStorage.setItem("auth-token", json.authtoken);

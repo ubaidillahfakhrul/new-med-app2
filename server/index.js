@@ -1,49 +1,37 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
 const cors = require("cors");
-
+const connectToMongo = require("./db");
 const app = express();
-const routes = require("./routes");  // Pastikan path-nya benar
+const path = require("path");
+const PORT = process.env.PORT || 8181;
 
-app.use(cors({
-  origin: 'https://new-med-app.onrender.com',
-  credentials: true,
-}));
-
+// Middleware
 app.use(express.json());
-app.use("/api", routes);  // Ini otomatis meng-handle semua /api/auth/*
-app.use(express.urlencoded({ extended: true }));
-
-// Session middleware (letakkan sebelum routes)
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'secretdefault',
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
-      collectionName: "sessions",
-    }),
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24,
-    },
+app.use(cors());
+// Connect to MongoDB
+connectToMongo()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port http://localhost:${PORT}`);
+    });
   })
-);
+  .catch((err) => {
+    console.error("❌ Failed to connect to MongoDB:", err);
+  });
 
-// Koneksi MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-mongoose.connection.once("open", () => {
-  console.log("MongoDB connected");
+// Routes
+app.use("/api/auth", require("./routes/auth"));
+app.use(express.static(path.join(__dirname, "build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-mongoose.set('strictQuery', true);
-
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
+
+// // Start the server
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port http://localhost:${PORT}`);
+// });

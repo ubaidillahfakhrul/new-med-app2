@@ -1,5 +1,6 @@
 import "./Navbar.css";
 //import { Link } from "react-router-dom"; // Import Link dari react-router-dom
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
@@ -17,6 +18,21 @@ function Navbar() {
     navigate("/");
     window.location.reload();
   };
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav>
@@ -79,11 +95,57 @@ function Navbar() {
           </>
         ) : (
           <>
-            <li className="link">
+            {/* Tambahkan disini menu interaktif */}
+            <li className="link" style={{ position: "relative" }}>
+              <span
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                style={{
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  userSelect: "none",
+                }}
+              >
+                Welcome, {userName}
+              </span>
+              {dropdownOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    right: 0,
+                    backgroundColor: "white",
+                    border: "1px solid #ddd",
+                    boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
+                    borderRadius: "4px",
+                    padding: "10px",
+                    zIndex: 10,
+                    minWidth: "160px", // 👈 tambahkan ini
+                  }}
+                >
+                  <Link
+                    to="/profile"
+                    className="dropdown-item"
+                    onClick={() => setDropdownOpen(false)}
+                    style={{ display: "block", marginBottom: "8px" }}
+                  >
+                    Your Profile
+                  </Link>
+                  <Link
+                    to="/report"
+                    className="dropdown-item"
+                    onClick={() => setDropdownOpen(false)}
+                    style={{ display: "block" }}
+                  >
+                    Your Reports
+                  </Link>
+                </div>
+              )}
+            </li>
+            {/* <li className="link">
               <span style={{ fontWeight: "bold", paddingRight: "10px" }}>
                 Welcome, {userName}
               </span>
-            </li>
+            </li> */}
             <li className="link">
               <button onClick={handleLogout} className="btn1">
                 Logout

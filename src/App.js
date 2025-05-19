@@ -8,6 +8,8 @@ import LoginPage from "./components/Login/Login";
 import Notification from "./components/Notification/Notification";
 import GiveReviews from "./components/ReviewForm/ReviewForm";
 import PageReview from "./components/ReviewForm/GiveReviews";
+import ProfileForm from "./components/ProfileCard/ProfileCard";
+import ReportLayout from "./components/ReportsLayout/ReportsLayout";
 
 function App() {
   const [userName, setUserName] = useState("");
@@ -42,6 +44,8 @@ function App() {
             }
           />
           <Route path="/reviews" element={<PageReview />} />
+          <Route path="/profile" element={<ProfileForm />} />
+          <Route path="/report" element={<ReportLayout />} />
         </Routes>
       </Notification>
     </div>

@@ -1,7 +1,6 @@
 // Following code has been commented with appropriate comments for your reference.
 import React, { useState, useEffect } from "react";
 // Apply CSS according to your design theme or the CSS provided in week 2 lab 2
-
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../../config";
 
@@ -9,62 +8,62 @@ const LoginPage = () => {
   // State variables for email and password
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Get navigation function from react-router-dom
   const navigate = useNavigate();
-
-  // Check if user is already authenticated, then redirect to home page
   useEffect(() => {
     if (sessionStorage.getItem("auth-token")) {
       navigate("/");
     }
   }, []);
 
-  // Function to handle login form submission
   const login = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      alert("Email and password need Filled.");
+      return;
+    }
+
+    setLoading(true);
     try {
-          // Send a POST request to the login API endpoint
-    const res = await fetch(`${API_URL}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
+      const res = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Parse the response JSON
-    const json = await res.json();
-    if (json.authtoken) {
-      // If authentication token is received, store it in session storage
-      sessionStorage.setItem("auth-token", json.authtoken);
-      sessionStorage.setItem("email", email);
-
-      // Redirect to home page and reload the window
-      navigate("/");
-      window.location.reload();
-    } else {
-      // Handle errors if authentication fails
-      // if (json.errors) {
-      //   for (const error of json.errors) {
-      //     alert(error.msg);
-      //   }
-      // } else {
-      //   alert(json.error);
-      // }
-      alert("Login gagal. Token tidak diterima.");
-    }
-    }
-    catch (error) {
-      // Tangkap error jaringan (misal backend belum jalan)
+      let json = {};
+      try {
+        json = await res.json();
+      } catch (err) {
+        console.error("JSON parse error:", err);
+        alert("Login failed: No response from server.");
+        return;
+      }
+      if (json.authtoken) {
+        sessionStorage.setItem("auth-token", json.authtoken);
+        sessionStorage.setItem("email", email);
+        navigate("/");
+        window.location.reload();
+      } else {
+        if (Array.isArray(json.errors)) {
+          alert(json.errors.map((err) => err.msg).join(", "));
+        } else if (json.error) {
+          alert(json.error);
+        } else {
+          alert("Login failed. Please check your email and password.");
+        }
+      }
+    } catch (error) {
       console.error("Login error:", error);
-      alert("Gagal login: Tidak bisa terhubung ke server. Pastikan backend sedang aktif.");
+      alert("Login failed: No response from server.");
+    } finally {
+      setLoading(false);
     }
   };
-
   return (
     <div>
       <div className="container">
@@ -73,7 +72,7 @@ const LoginPage = () => {
             <h2>Login</h2>
           </div>
           <div className="login-text">
-            Are you a new member?
+            Are you a new member?{" "}
             <span>
               <Link to="/signup" style={{ color: "#2190FF" }}>
                 Sign Up Here
@@ -85,7 +84,6 @@ const LoginPage = () => {
             <form onSubmit={login}>
               <div className="form-group">
                 <label htmlFor="email">Email</label>
-                {/* Input field for email */}
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -97,7 +95,7 @@ const LoginPage = () => {
                   aria-describedby="helpId"
                 />
               </div>
-              {/* Input field for password */}
+
               <label htmlFor="password">Password</label>
               <input
                 value={password}
@@ -109,13 +107,14 @@ const LoginPage = () => {
                 placeholder="Enter your password"
                 aria-describedby="helpId"
               />
+
               <div className="btn-group">
-                {/* Login button */}
                 <button
                   type="submit"
                   className="btn btn-primary mb-2 mr-1 waves-effect waves-light"
+                  disabled={loading}
                 >
-                  Login
+                  {loading ? "Logging in..." : "Login"}
                 </button>
               </div>
             </form>

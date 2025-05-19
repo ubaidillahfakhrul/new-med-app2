@@ -9,15 +9,12 @@ function PageReview() {
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("appointments") || "[]");
 
-    // Contoh data harus punya doctorId di appointment
-    // Simulasi jika data tidak ada doctorId, tambahkan default id untuk testing
     const confirmed = stored
       .filter((app) => app.status === "confirmed")
       .map((app, idx) => ({
         ...app,
         doctorId: app.doctorId || idx + 1,
       }));
-
     setAppointments(confirmed);
   }, []);
 
@@ -39,35 +36,52 @@ function PageReview() {
 
   return (
     <div>
-      <h2>Give Feedback</h2>
-
+      <h2>Reviews</h2>
       {appointments.length === 0 ? (
         <p>No appointments yet.</p>
       ) : (
-        <ul>
-          {appointments.map((app) => (
-            <li key={app.doctorId}>
-              {app.doctorName} ({app.doctorSpeciality}) - {app.appointmentDate}{" "}
-              {app.timeSlot}{" "}
-              <button onClick={() => handleGiveReviewClick(app)}>
-                Give Review
-              </button>
-              {/* Tampilkan review jika sudah ada */}
-              {reviews[app.doctorId] && (
-                <div style={{ marginTop: "5px", fontStyle: "italic" }}>
-                  <strong>Your Review:</strong> {reviews[app.doctorId].review}{" "}
-                  <br />
-                  <strong>Rating:</strong>{" "}
-                  {"★".repeat(reviews[app.doctorId].rating) +
-                    "☆".repeat(5 - reviews[app.doctorId].rating)}
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+        <table className="review-table">
+          <thead>
+            <tr>
+              <th>Serial Number</th>
+              <th>Doctor Name</th>
+              <th>Doctor Speciality</th>
+              <th>Provide feedback</th>
+              <th>Review Given</th>
+            </tr>
+          </thead>
+          <tbody>
+            {appointments.map((app, index) => {
+              const isReviewed = !!reviews[app.doctorId];
+              return (
+                <tr key={app.doctorId}>
+                  <td>{index + 1}</td>
+                  <td>{app.doctorName}</td>
+                  <td>{app.doctorSpeciality}</td>
+                  <td>
+                    <button
+                      className="btn-review"
+                      disabled={isReviewed}
+                      onClick={() => handleGiveReviewClick(app)}
+                    >
+                      Click Here
+                    </button>
+                  </td>
+                  <td>
+                    {isReviewed && (
+                      <div className="star-box">
+                        {"★".repeat(reviews[app.doctorId].rating)}
+                        {"☆".repeat(5 - reviews[app.doctorId].rating)}
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       )}
 
-      {/* Form review muncul kalau sudah klik give review */}
       {selectedDoctor && (
         <ReviewForm
           doctor={selectedDoctor}
@@ -106,17 +120,13 @@ function ReviewForm({ doctor, onSubmit, onCancel }) {
   };
 
   return (
-    <div
-      style={{ marginTop: "20px", padding: "15px", border: "1px solid #ccc" }}
-    >
+    <div className="form-box">
       <h3>Give Review for {doctor.doctorName}</h3>
-
       {showWarning && (
         <p style={{ color: "red" }}>
           Please fill all fields and select a rating.
         </p>
       )}
-
       <form onSubmit={handleSubmit}>
         <div>
           <label>Name:</label>
@@ -128,7 +138,6 @@ function ReviewForm({ doctor, onSubmit, onCancel }) {
             onChange={handleChange}
           />
         </div>
-
         <div>
           <label>Review:</label>
           <br />
@@ -138,7 +147,6 @@ function ReviewForm({ doctor, onSubmit, onCancel }) {
             onChange={handleChange}
           />
         </div>
-
         <div>
           <label>Rating:</label>
           <br />
@@ -156,15 +164,10 @@ function ReviewForm({ doctor, onSubmit, onCancel }) {
             </span>
           ))}
         </div>
-
-        <button type="submit" style={{ marginTop: "10px" }}>
+        <button type="submit" className="btn-submit">
           Submit
         </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          style={{ marginLeft: "10px", marginTop: "10px" }}
-        >
+        <button type="button" onClick={onCancel} className="btn-cancel">
           Cancel
         </button>
       </form>
