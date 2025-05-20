@@ -1,32 +1,37 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
+# Root-level ignores
+node_modules/
+.pnp/
 .pnp.js
-# Vite build output
-/dist
-# Optional: if using Vite preview server
-/.vite
-# testing
-/coverage
-
-# production
-/build
-# environment variables
-.env
-.env.*.local
-# misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-/folder.md
-/new-med-app2.code-workspace
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-# VSCode
 .vscode/
+*.log
+
+# Client-only ignores
+client/node_modules/
+client/.pnp/
+client/.pnp.js
+client/coverage/
+client/.env*
+client/dist/
+client/.vite
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+
+# Server-only ignores
+server/node_modules/
+server/.env*
+server/npm-debug.log*
+server/yarn-debug.log*
+server/yarn-error.log*
+
+# IGNORE this only if NOT serving React from server/build
+# BUT in your case, we NEED to keep server/build!
+# ❗ So DO NOT include the line below:
+# server/build/
+
+# VSCode & workspace settings
+folder.md
+new-med-app2.code-workspace
