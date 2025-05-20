@@ -94,9 +94,16 @@ const InstantConsultation = () => {
             ""
           )}
           {/* //Coba tracing doctor card */}
+          <p>isSearched: {isSearched ? "true" : "false"}</p>
+          <p>filteredDoctors length: {filteredDoctors.length}</p>
+
           {isSearched && filteredDoctors.length === 0 && (
             <p>No doctors found for this speciality.</p>
           )}
+
+          {filteredDoctors.map((doctor) => (
+            <DoctorCard key={doctor.id} doctor={doctor} />
+          ))}
         </div>
       </div>
     </center>
