@@ -3,7 +3,7 @@
 ## Medical Appointment Booking
 
 **Stucture Folder** new-med-app2/
-
+```
 ├── server/
 │ ├── public/
 │ └── src/
@@ -23,4 +23,6 @@
 │ │ ├── App.js
 │ │ ├── index.js
 │ │ └── package.json
+```
+
 
