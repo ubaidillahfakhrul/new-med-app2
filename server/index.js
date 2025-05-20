@@ -6,10 +6,19 @@ const cors = require("cors");
 
 const app = express();
 const routes = require("./routes"); // Pastikan path-nya benar
-
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://new-med-app.onrender.com",
+];
 app.use(
   cors({
-    origin: "https://new-med-app.onrender.com",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );

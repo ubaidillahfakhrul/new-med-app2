@@ -8,5 +8,5 @@ const isLocal =
   window.location.hostname.startsWith("192.168."); // jaringan lokal
 
 export const API_URL = isLocal
-  ? "http://localhost:8181"
-  : "https://new-med-app2.onrender.com";  //url back end for live
+  ? "http://localhost:5000"
+  : "https://new-med-app2.onrender.com"; //url back end for live
