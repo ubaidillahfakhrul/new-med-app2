@@ -2,9 +2,13 @@
 
 ## Medical Appointment Booking
 
+<<<<<<< HEAD
 **Stucture Folder**
 new-med-app2/
 
+=======
+**Stucture Folder** new-med-app2/
+>>>>>>> c0472173ab4d99e4a824460560e220f4f0392062
 ```
 ├── server/
 │ ├── public/
@@ -26,3 +30,8 @@ new-med-app2/
 │ │ ├── index.js
 │ │ └── package.json
 ```
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c0472173ab4d99e4a824460560e220f4f0392062
