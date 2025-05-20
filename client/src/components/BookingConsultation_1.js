@@ -10,22 +10,22 @@ const InstantConsultation = () => {
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
 
+  const speciality = searchParams.get("speciality");
+  console.log("Speciality from URL:", speciality);
+
   const getDoctorsDetails = () => {
     fetch("https://api.npoint.io/9a5543d36f1460da2f63")
       .then((res) => res.json())
       .then((data) => {
+        console.log("Fetched doctors data:", data);
         if (searchParams.get("speciality")) {
-          // window.reload()
+          const speciality = searchParams.get("speciality").toLowerCase();
           const filtered = data.filter(
-            (doctor) =>
-              doctor.speciality.toLowerCase() ===
-              searchParams.get("speciality").toLowerCase()
+            (doctor) => doctor.speciality.toLowerCase() === speciality
           );
-
+          console.log("Filtered doctors:", filtered);
           setFilteredDoctors(filtered);
-
           setIsSearched(true);
-          window.reload();
         } else {
           setFilteredDoctors([]);
           setIsSearched(false);
@@ -34,6 +34,7 @@ const InstantConsultation = () => {
       })
       .catch((err) => console.log(err));
   };
+
   const handleSearch = (searchText) => {
     if (searchText === "") {
       setFilteredDoctors([]);
@@ -51,6 +52,10 @@ const InstantConsultation = () => {
   };
   const navigate = useNavigate();
   useEffect(() => {
+    console.log(
+      "useEffect triggered with searchParams:",
+      searchParams.toString()
+    );
     getDoctorsDetails();
     // const authtoken = sessionStorage.getItem("auth-token");
     // if (!authtoken) {
@@ -88,6 +93,17 @@ const InstantConsultation = () => {
           ) : (
             ""
           )}
+          {/* //Coba tracing doctor card */}
+          <p>isSearched: {isSearched ? "true" : "false"}</p>
+          <p>filteredDoctors length: {filteredDoctors.length}</p>
+
+          {isSearched && filteredDoctors.length === 0 && (
+            <p>No doctors found for this speciality.</p>
+          )}
+
+          {filteredDoctors.map((doctor) => (
+            <DoctorCard key={doctor.id} doctor={doctor} />
+          ))}
         </div>
       </div>
     </center>
