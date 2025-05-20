@@ -17,17 +17,20 @@ const InstantConsultation = () => {
     fetch("https://api.npoint.io/9a5543d36f1460da2f63")
       .then((res) => res.json())
       .then((data) => {
-        console.log("All doctors:", data);
-        if (speciality) {
+        console.log("Fetched doctors data:", data);
+        if (searchParams.get("speciality")) {
+          const speciality = searchParams.get("speciality").toLowerCase();
           const filtered = data.filter(
-            (doctor) =>
-              doctor.speciality.toLowerCase() === speciality.toLowerCase()
+            (doctor) => doctor.speciality.toLowerCase() === speciality
           );
           console.log("Filtered doctors:", filtered);
           setFilteredDoctors(filtered);
+          setIsSearched(true);
         } else {
           setFilteredDoctors([]);
+          setIsSearched(false);
         }
+        setDoctors(data);
       })
       .catch((err) => console.log(err));
   };
@@ -49,6 +52,10 @@ const InstantConsultation = () => {
   };
   const navigate = useNavigate();
   useEffect(() => {
+    console.log(
+      "useEffect triggered with searchParams:",
+      searchParams.toString()
+    );
     getDoctorsDetails();
     // const authtoken = sessionStorage.getItem("auth-token");
     // if (!authtoken) {
@@ -85,6 +92,10 @@ const InstantConsultation = () => {
             </center>
           ) : (
             ""
+          )}
+          {/* //Coba tracing doctor card */}
+          {isSearched && filteredDoctors.length === 0 && (
+            <p>No doctors found for this speciality.</p>
           )}
         </div>
       </div>
