@@ -24,8 +24,8 @@ const InstantConsultation = () => {
           );
 
           setFilteredDoctors(filtered);
-          alert(`Jumlah dokter ditemukan: ${filtered.length}`);
-          console.log("Filtered doctors:", filtered);
+          // alert(`Jumlah dokter ditemukan: ${filtered.length}`);
+          // console.log("Filtered doctors:", filtered);
           // Timer 3 detik sebelum alert
           // setTimeout(() => {
           //   alert(`Jumlah dokter ditemukan: ${filtered.length}`);
@@ -52,7 +52,7 @@ const InstantConsultation = () => {
 
       setFilteredDoctors(filtered);
       setIsSearched(true);
-      window.location.reload();
+      //window.location.reload();
     }
   };
   const navigate = useNavigate();
