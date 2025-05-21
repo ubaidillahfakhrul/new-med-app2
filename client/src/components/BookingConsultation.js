@@ -24,6 +24,11 @@ const InstantConsultation = () => {
 
           setFilteredDoctors(filtered);
           alert(`Jumlah dokter ditemukan: ${filtered.length}`);
+          console.log("Filtered doctors:", filtered);
+          // Timer 3 detik sebelum alert
+          setTimeout(() => {
+            alert(`Jumlah dokter ditemukan: ${filtered.length}`);
+          }, 5000); // 3000ms = 3 detik
           setIsSearched(true);
           //window.reload();
         } else {
