@@ -26,9 +26,9 @@ const InstantConsultation = () => {
           alert(`Jumlah dokter ditemukan: ${filtered.length}`);
           console.log("Filtered doctors:", filtered);
           // Timer 3 detik sebelum alert
-          setTimeout(() => {
-            alert(`Jumlah dokter ditemukan: ${filtered.length}`);
-          }, 5000); // 3000ms = 3 detik
+          // setTimeout(() => {
+          //   alert(`Jumlah dokter ditemukan: ${filtered.length}`);
+          // }, 5000); // 3000ms = 3 detik
           setIsSearched(true);
           //window.reload();
         } else {
@@ -67,7 +67,10 @@ const InstantConsultation = () => {
     <center>
       <div className="searchpage-container">
         <FindDoctorSearch onSearch={handleSearch} />
+
         <div className="search-results-container">
+          {/* Tampilkan pesan loading saat data sedang dimuat */}
+          {loading && <p>Loading doctors...</p>}
           {isSearched ? (
             <center>
               <h2>
