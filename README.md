@@ -25,6 +25,16 @@ root
 └── package.json
 ```
 
+# Preview
+
+![Dashboard Preview 1](https://github.com/ubaidillahfakhrul/new-med-app2/raw/main/client/public/images/med-app2-1.gif)
+
+![Dashboard Preview 1](https://github.com/ubaidillahfakhrul/new-med-app2/raw/main/client/public/images/med-app2-2.gif)
+
+![Dashboard Preview 1](https://github.com/ubaidillahfakhrul/new-med-app2/raw/main/client/public/images/med-app2-3.gif)
+
+![Dashboard Preview 1](https://github.com/ubaidillahfakhrul/new-med-app2/raw/main/client/public/images/med-app2-4.gif)
+
 # 🏥 New-Med App — Modern Medical Appointment & Review Platform
 
 Welcome to **New-Med App** — a sleek, full-stack medical appointment platform that makes it easier for patients to:
