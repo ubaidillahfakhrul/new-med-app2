@@ -70,8 +70,6 @@ const InstantConsultation = () => {
         <FindDoctorSearch onSearch={handleSearch} />
 
         <div className="search-results-container">
-          {/* Tampilkan pesan loading saat data sedang dimuat */}
-          {loading && <p>Loading doctors...</p>}
           {isSearched ? (
             <center>
               <h2>
